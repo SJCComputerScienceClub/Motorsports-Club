@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorsports Club</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --scarlet: #cc0000;
+            --dark-scarlet: #990000;
+            --grey: #666666;
+            --dark-grey: #333333;
+            --light-grey: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-grey);
+            background: linear-gradient(135deg, var(--scarlet) 0%, var(--dark-scarlet) 50%, var(--dark-grey) 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--scarlet);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px var(--scarlet);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🏎️";
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background: var(--scarlet);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        main {
+            margin-top: 80px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 6rem 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path d="M100,300 Q500,100 900,300 L900,700 Q500,900 100,700 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease;
+            background: linear-gradient(45deg, white, #ffcccc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--scarlet), var(--dark-scarlet));
+            color: white;
+            padding: 1.2rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.4s both;
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+            border: 2px solid transparent;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(204, 0, 0, 0.6);
+            border-color: white;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .card-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 2px solid var(--light-grey);
+        }
+
+        .card-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border-color: var(--scarlet);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            color: var(--dark-grey);
+            text-align: center;
+            position: relative;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, var(--scarlet), var(--dark-scarlet));
+            display: block;
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--scarlet);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            color: var(--scarlet);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .motorsports-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .motorsport-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .motorsport-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--scarlet);
+        }
+
+        .motorsport-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--scarlet), var(--dark-scarlet));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .motorsport-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .motorsport-card:hover .motorsport-image::before {
+            left: 100%;
+        }
+
+        .motorsport-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .motorsport-info h4 {
+            color: var(--dark-grey);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .motorsport-info p {
+            color: var(--grey);
+            font-size: 0.9rem;
+        }
+
+        .meeting-times {
+            background: linear-gradient(135deg, var(--scarlet), var(--dark-scarlet));
+            color: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(204, 0, 0, 0.3);
+        }
+
+        .meeting-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .meeting-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(10px);
+        }
+
+        .meeting-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meeting-card h4::before {
+            content: "📅";
+        }
+
+        .event-date {
+            background: linear-gradient(45deg, white, #ffcccc);
+            color: var(--dark-scarlet);
+            padding: 0.7rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .member-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--scarlet), var(--dark-scarlet));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: white;
+            font-weight: bold;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--scarlet);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 3px solid var(--scarlet);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                border-top: 2px solid var(--scarlet);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                color: white;
+                padding: 1rem;
+                border-bottom: 1px solid var(--grey);
+                border-radius: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .grid, .motorsports-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 999;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(45deg, var(--scarlet), var(--dark-scarlet));
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Motorsports Club</div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#motorsports">Motorsports</a></li>
+                    <li><a href="#meetings">Meetings</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#members">Members</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Motorsports Club</h1>
+                    <p>Fueling passion for speed, precision, and automotive excellence</p>
+                    <a href="#contact" class="cta-button">Join the Club</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <div class="card-container">
+                    <h2 class="section-title">About Our Club</h2>
+                    <p style="font-size: 1.2rem; text-align: center; margin-bottom: 2rem; color: var(--dark-grey); line-height: 1.8;">
+                        [Insert your club's about statement here. This section should describe your club's mission, 
+                        what you do, who can join, and what makes your motorsports club special. Include information 
+                        about your activities, goals, and the community you've built.]
+                    </p>
+                    <div class="grid">
+                        <div class="card">
+                            <h3>🏁 Our Mission</h3>
+                            <p>To create a community of motorsports enthusiasts who share knowledge, experiences, and passion for automotive excellence while promoting safe and responsible motorsports activities.</p>
+                        </div>
+                        <div class="card">
+                            <h3>🚗 What We Do</h3>
+                            <p>From track days and autocross events to tech talks and car shows, we engage in all aspects of motorsports culture while building lasting friendships and skills.</p>
+                        </div>
+                        <div class="card">
+                            <h3>🤝 Join Us</h3>
+                            <p>Whether you're a seasoned racer or just getting started with motorsports, our club welcomes all skill levels and interests in the automotive world.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="motorsports" class="section">
+            <div class="container">
+                <div class="card-container">
+                    <h2 class="section-title">Motorsports We Love</h2>
+                    <div class="motorsports-gallery">
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">🏎️</div>
+                            <div class="motorsport-info">
+                                <h4>Formula Racing</h4>
+                                <p>Open-wheel single-seater racing at its finest</p>
+                            </div>
+                        </div>
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">🏁</div>
+                            <div class="motorsport-info">
+                                <h4>NASCAR</h4>
+                                <p>Stock car racing with intense competition</p>
+                            </div>
+                        </div>
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">🏆</div>
+                            <div class="motorsport-info">
+                                <h4>Autocross</h4>
+                                <p>Precision driving through coned courses</p>
+                            </div>
+                        </div>
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">🚙</div>
+                            <div class="motorsport-info">
+                                <h4>Rally Racing</h4>
+                                <p>High-speed racing through varied terrain</p>
+                            </div>
+                        </div>
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">🏍️</div>
+                            <div class="motorsport-info">
+                                <h4>Motorcycle Racing</h4>
+                                <p>Two-wheeled speed and agility</p>
+                            </div>
+                        </div>
+                        <div class="motorsport-card">
+                            <div class="motorsport-image">⛽</div>
+                            <div class="motorsport-info">
+                                <h4>Drag Racing</h4>
+                                <p>Quarter-mile sprints of pure acceleration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="meetings" class="section">
+            <div class="container">
+                <div class="meeting-times">
+                    <h2 class="section-title" style="color: white;">Meeting Times</h2>
+                    <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">
+                        Our meeting schedule varies throughout the semester. Check back regularly for updates!
+                    </p>
+                    
+                    <div class="meeting-card">
+                        <h4>Regular Meetings</h4>
+                        <p><strong>When:</strong> Every other Wednesday, 7:00 PM - 8:30 PM</p>
+                        <p><strong>Where:</strong> [Insert Location Here]</p>
+                        <p>General club meetings covering upcoming events, tech talks, and member discussions.</p>
+                    </div>
+
+                    <div class="meeting-card">
+                        <h4>Tech Sessions</h4>
+                        <p><strong>When:</strong> Monthly, First Saturday of each month, 2:00 PM - 5:00 PM</p>
+                        <p><strong>Where:</strong> [Insert Location Here]</p>
+                        <p>Hands-on workshops covering car maintenance, modifications, and racing techniques.</p>
+                    </div>
+
+                    <div class="meeting-card">
+                        <h4>Social Gatherings</h4>
+                        <p><strong>When:</strong> Varies - Check calendar for updates</p>
+                        <p><strong>Where:</strong> Various locations</p>
+                        <p>Informal meetups, car shows, and social events to build community.</p>
+                    </div>
+
+                    <div class="meeting-card">
+                        <h4>Track Days</h4>
+                        <p><strong>When:</strong> Seasonal - Spring and Fall weekends</p>
+                        <p><strong>Where:</strong> Local racing circuits</p>
+                        <p>Organized track events for members to experience real racing conditions safely.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="section">
+            <div class="container">
+                <div class="card-container">
+                    <h2 class="section-title">Upcoming Events</h2>
+                    <div class="grid">
+                        <div class="card">
+                            <div class="event-date">Jan 15, 2026</div>
+                            <h3>🏁 Season Kickoff Meeting</h3>
+                            <p>Join us for our first meeting of the new semester! We'll discuss this year's events, introduce new members, and plan our exciting season ahead.</p>
+                        </div>
+                        <div class="card">
+                            <div class="event-date">Feb 8, 2026</div>
+                            <h3>🔧 Tech Session: Basic Maintenance</h3>
+                            <p>Learn essential car maintenance skills including oil changes, brake inspection, and basic diagnostics. Perfect for beginners!</p>
+                        </div>
+                        <div class="card">
+                            <div class="event-date">Mar 12, 2026</div>
+                            <h3>🏆 Local Autocross Event</h3>
+                            <p>Our first competitive event of the season! Come test your driving skills on a timed course. All skill levels welcome.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="members" class="section">
+            <div class="container">
+                <div class="card-container">
+                    <h2 class="section-title">Our Leadership Team</h2>
+                    <div class="grid">
+                        <div class="card member-card">
+                            <div class="member-avatar">AP</div>
+                            <h3>Alex President</h3>
+                            <p><strong>Club President</strong></p>
+                            <p>Leading our club with passion for motorsports and extensive racing experience since 2023.</p>
+                        </div>
+                        <div class="card member-card">
+                            <div class="member-avatar">SV</div>
+                            <h3>Sam Vice</h3>
+                            <p><strong>Vice President</strong></p>
+                            <p>Organizing events and coordinating with local racing venues and automotive businesses.</p>
+                        </div>
+                        <div class="card member-card">
+                            <div class="member-avatar">MT</div>
+                            <h3>Morgan Treasurer</h3>
+                            <p><strong>Treasurer</strong></p>
+                            <p>Managing club finances and securing sponsorships for our racing activities.</p>
+                        </div>
+                        <div class="card member-card">
+                            <div class="member-avatar">ES</div>
+                            <h3>Emma Secretary</h3>
+                            <p><strong>Secretary</strong></p>
+                            <p>Keeping detailed records and maintaining communication between members and leadership.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container">
+                <div class="card-container">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem; color: var(--dark-grey);">
+                        Ready to join our motorsports community? Contact us today!
+                    </p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <h3>Email</h3>
+                            <p>motorsports@yourschool.edu</p>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📱</div>
+                            <h3>Phone</h3>
+                            <p>(555) 123-RACE</p>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📍</div>
+                            <h3>Location</h3>
+                            <p>[Your School Name]<br>[Building/Room Number]<br>[Address]</p>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">💬</div>
+                            <h3>Social Media</h3>
+                            <p>@MotorsportsClub<br>Follow us for updates!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Motorsports Club. All rights reserved. | Built for speed, driven by passion.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // Close mobile menu if open
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const maxHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrolled / maxHeight) * 100;
+            document.getElementById('scrollProgress').style.width = progress + '%';
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+                header.style.backdropFilter = 'blur(15px)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.8)';
+                header.style.backdropFilter = 'blur(10px)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards for animation
+        document.querySelectorAll('.card, .card-container, .motorsport-card, .meeting-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Add racing sound effect on CTA button click (optional)
+        document.querySelector('.cta-button').addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.05)';
+        });
+
+        document.querySelector('.cta-button').addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    </script>
+</body>
+</html>
